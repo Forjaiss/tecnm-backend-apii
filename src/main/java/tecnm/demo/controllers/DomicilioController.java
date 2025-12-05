@@ -9,25 +9,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/domicilios")
 public class DomicilioController {
-
-    @Autowired
-    private DomicilioRepository repositorio;
+    @Autowired private DomicilioRepository repo;
 
     @GetMapping
-    public List<Domicilio> obtenerTodos() {
-        return repositorio.findAll();
-    }
+    public List<Domicilio> todos() { return repo.findAll(); }
 
-    
     @GetMapping("/usuario/{id}")
-    public List<Domicilio> obtenerPorUsuario(@PathVariable Long id) {
-        return repositorio.findByUsuario(id);
+    public List<Domicilio> porUsuario(@PathVariable Long id) { return repo.findByUsuario(id); }
+
+    @PostMapping
+    public String crear(@RequestBody Domicilio d) {
+        repo.save(d);
+        return "Guardado";
     }
 
-  
-    @PostMapping
-    public String guardarDomicilio(@RequestBody Domicilio domicilio) {
-        repositorio.save(domicilio);
-        return "Domicilio guardado con éxito";
+    @PutMapping("/{id}")
+    public String actualizar(@PathVariable Long id, @RequestBody Domicilio d) {
+        return (repo.update(id, d) > 0) ? "Actualizado" : "No encontrado";
+    }
+
+    @DeleteMapping("/{id}")
+    public String eliminar(@PathVariable Long id) {
+        return (repo.delete(id) > 0) ? "Eliminado" : "No encontrado";
     }
 }

@@ -4,52 +4,56 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import tecnm.demo.models.Producto;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 @Repository
 public class ProductoRepository {
-
     private final JdbcTemplate jdbcTemplate;
 
-  
     public ProductoRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // --- LEER TODOS ---
     public List<Producto> findAll() {
-        String sql = "SELECT * FROM productos";
-        return jdbcTemplate.query(sql, new ProductoRowMapper());
+        return jdbcTemplate.query("SELECT * FROM productos", new ProductoRowMapper());
     }
 
-    public Producto save(Producto p) {
+    // --- BUSCAR POR ID (FALTABA) ---
+    public Producto findById(Long id) {
+        String sql = "SELECT * FROM productos WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new ProductoRowMapper(), id);
+        } catch (Exception e) { return null; }
+    }
+
+    // --- GUARDAR ---
+    public void save(Producto p) {
         String sql = """
             INSERT INTO productos (nombre, precio, sku, color, marca, descripcion, peso, alto, ancho, profundidad, categorias_id, img_url, stock)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
-
-       
-        jdbcTemplate.update(sql,
-            p.nombre,
-            p.precio,
-            p.sku,
-            p.color,
-            p.marca,
-            p.descripcion,
-            p.peso,
-            p.alto,
-            p.ancho,
-            p.profundidad,
-            p.categoriasId,
-            p.imgUrl,
-            p.stock
-        );
-
-        return p;
+        jdbcTemplate.update(sql, p.nombre, p.precio, p.sku, p.color, p.marca, p.descripcion, 
+                            p.peso, p.alto, p.ancho, p.profundidad, p.categoriasId, p.imgUrl, p.stock);
     }
 
+    // --- ACTUALIZAR (FALTABA) ---
+    public int update(Long id, Producto p) {
+        String sql = """
+            UPDATE productos SET nombre=?, precio=?, sku=?, color=?, marca=?, descripcion=?, 
+            peso=?, alto=?, ancho=?, profundidad=?, categorias_id=?, img_url=?, stock=?
+            WHERE id = ?
+        """;
+        return jdbcTemplate.update(sql, p.nombre, p.precio, p.sku, p.color, p.marca, p.descripcion, 
+                            p.peso, p.alto, p.ancho, p.profundidad, p.categoriasId, p.imgUrl, p.stock, id);
+    }
+
+    // --- ELIMINAR (FALTABA) ---
+    public int delete(Long id) {
+        return jdbcTemplate.update("DELETE FROM productos WHERE id = ?", id);
+    }
 
     private static class ProductoRowMapper implements RowMapper<Producto> {
         @Override
@@ -66,7 +70,7 @@ public class ProductoRepository {
             p.alto = rs.getDouble("alto");
             p.ancho = rs.getDouble("ancho");
             p.profundidad = rs.getDouble("profundidad");
-            p.categoriasId = rs.getLong("categorias_id"); // Ojo con el guion bajo
+            p.categoriasId = rs.getLong("categorias_id");
             p.imgUrl = rs.getString("img_url");
             p.stock = rs.getInt("stock");
             return p;
