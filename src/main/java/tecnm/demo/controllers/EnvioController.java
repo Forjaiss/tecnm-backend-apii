@@ -14,7 +14,6 @@ public class EnvioController {
     @GetMapping
     public List<Envio> listar() { return repo.findAll(); }
 
-    // Actualizar estado: /api/envios/1?estado=ENTREGADO
     @PutMapping("/{id}")
     public String actualizar(@PathVariable Long id, @RequestParam String estado) {
         repo.updateEstado(id, estado);

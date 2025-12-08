@@ -3,7 +3,7 @@ package tecnm.demo.repositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import tecnm.demo.models.DetalleCarrito; // Asegúrate de tener este modelo
+import tecnm.demo.models.DetalleCarrito; 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,23 +24,19 @@ public class CarritoRepository {
         } catch (Exception e) { return null; }
     }
 
-    // Insertar nuevo
     public void save(DetalleCarrito item) {
         String sql = "INSERT INTO detalles_carrito (cantidad, precio, productos_id, usuarios_id) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(sql, item.cantidad, item.precio, item.productosId, item.usuariosId);
     }
 
-    // Actualizar cantidad (Inteligencia)
     public void updateCantidad(Long id, Integer cantidad) {
         jdbcTemplate.update("UPDATE detalles_carrito SET cantidad = ? WHERE id = ?", cantidad, id);
     }
 
-    // Ver carrito
     public List<DetalleCarrito> findByUsuario(Long usuarioId) {
         return jdbcTemplate.query("SELECT * FROM detalles_carrito WHERE usuarios_id = ?", new CarritoMapper(), usuarioId);
     }
     
-    // Vaciar
     public void deleteByUsuario(Long usuarioId) {
         jdbcTemplate.update("DELETE FROM detalles_carrito WHERE usuarios_id = ?", usuarioId);
     }

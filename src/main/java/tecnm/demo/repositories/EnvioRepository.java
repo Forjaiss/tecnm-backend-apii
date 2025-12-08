@@ -19,8 +19,7 @@ public class EnvioRepository {
             e.numeroSeguimiento = rs.getString("numero_seguimiento");
             e.domiciliosId = rs.getLong("domicilios_id");
             e.pedidosId = rs.getLong("pedidos_id");
-            // Mapeo básico de fechas si es necesario
-            // e.fecha = rs.getTimestamp("fecha").toLocalDateTime();
+           
             return e;
         });
     }

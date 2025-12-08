@@ -11,7 +11,7 @@ public class ReportesRepository {
 
     public ReportesRepository(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
 
-    // Métodos para todas tus vistas SQL
+   
     public List<Map<String, Object>> ventas() { return jdbcTemplate.queryForList("SELECT * FROM vista_estadisticas_ventas"); }
     public List<Map<String, Object>> envios() { return jdbcTemplate.queryForList("SELECT * FROM vista_envios_pendientes"); }
     public List<Map<String, Object>> inventario() { return jdbcTemplate.queryForList("SELECT * FROM vista_inventario_optimizado"); }

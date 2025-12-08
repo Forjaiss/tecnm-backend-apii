@@ -17,24 +17,19 @@ public class PedidoController {
 
     @PostMapping("/checkout")
     public String checkout(@RequestBody Pedido datos) {
-        // 1. Leer carrito
         List<DetalleCarrito> carrito = carritoRepo.findByUsuario(datos.usuariosId);
         if (carrito.isEmpty()) return "El carrito está vacío";
 
-        // 2. Calcular total
         double total = 0;
         for (DetalleCarrito item : carrito) total += (item.precio * item.cantidad);
         datos.importeProductos = total;
 
-        // 3. Guardar Pedido
         Long idPedido = pedidoRepo.crearPedido(datos);
 
-        // 4. Guardar Detalles
         for (DetalleCarrito item : carrito) {
             pedidoRepo.guardarDetalle(idPedido, item.productosId, item.cantidad, item.precio);
         }
 
-        // 5. Borrar Carrito
         carritoRepo.deleteByUsuario(datos.usuariosId);
 
         return "Pedido #" + idPedido + " generado con éxito";

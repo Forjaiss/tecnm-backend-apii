@@ -29,13 +29,13 @@ public class UsuarioRepository {
         jdbcTemplate.update(sql, u.nombre, u.email, u.telefono, u.sexo, u.fechaNacimiento, u.contrasena);
     }
 
-    // UPDATE (Faltaba)
+    
     public int update(Long id, Usuario u) {
         String sql = "UPDATE usuarios SET nombre=?, email=?, telefono=?, sexo=?, fecha_nacimiento=? WHERE id=?";
         return jdbcTemplate.update(sql, u.nombre, u.email, u.telefono, u.sexo, u.fechaNacimiento, id);
     }
 
-    // DELETE (Faltaba)
+
     public int delete(Long id) {
         return jdbcTemplate.update("DELETE FROM usuarios WHERE id = ?", id);
     }

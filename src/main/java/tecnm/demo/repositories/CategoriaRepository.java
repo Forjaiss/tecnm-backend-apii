@@ -3,7 +3,7 @@ package tecnm.demo.repositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import tecnm.demo.models.Categoria; // Asegúrate de tener el modelo
+import tecnm.demo.models.Categoria;
 import java.util.List;
 
 @Repository

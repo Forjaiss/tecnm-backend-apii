@@ -16,12 +16,12 @@ public class ProductoRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // --- LEER TODOS ---
+
     public List<Producto> findAll() {
         return jdbcTemplate.query("SELECT * FROM productos", new ProductoRowMapper());
     }
 
-    // --- BUSCAR POR ID (FALTABA) ---
+   
     public Producto findById(Long id) {
         String sql = "SELECT * FROM productos WHERE id = ?";
         try {
@@ -29,7 +29,7 @@ public class ProductoRepository {
         } catch (Exception e) { return null; }
     }
 
-    // --- GUARDAR ---
+   
     public void save(Producto p) {
         String sql = """
             INSERT INTO productos (nombre, precio, sku, color, marca, descripcion, peso, alto, ancho, profundidad, categorias_id, img_url, stock)
@@ -39,7 +39,7 @@ public class ProductoRepository {
                             p.peso, p.alto, p.ancho, p.profundidad, p.categoriasId, p.imgUrl, p.stock);
     }
 
-    // --- ACTUALIZAR (FALTABA) ---
+ 
     public int update(Long id, Producto p) {
         String sql = """
             UPDATE productos SET nombre=?, precio=?, sku=?, color=?, marca=?, descripcion=?, 
@@ -50,7 +50,6 @@ public class ProductoRepository {
                             p.peso, p.alto, p.ancho, p.profundidad, p.categoriasId, p.imgUrl, p.stock, id);
     }
 
-    // --- ELIMINAR (FALTABA) ---
     public int delete(Long id) {
         return jdbcTemplate.update("DELETE FROM productos WHERE id = ?", id);
     }

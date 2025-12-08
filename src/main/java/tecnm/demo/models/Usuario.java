@@ -1,4 +1,4 @@
-package tecnm.demo.models; // <--- ESTA LÍNEA ES VITAL
+package tecnm.demo.models; 
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ public class Usuario {
     public String email;
     public String telefono;
     
-    // Estos son los que te faltaban:
+   
     public String sexo;
     @Column(name = "fecha_nacimiento")
     public LocalDate fechaNacimiento;

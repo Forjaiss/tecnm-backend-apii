@@ -14,16 +14,16 @@ public class CarritoController {
 
     @PostMapping
     public String agregar(@RequestBody DetalleCarrito item) {
-        // 1. Verificar si existe
+        
         DetalleCarrito existe = repo.findItem(item.usuariosId, item.productosId);
 
         if (existe != null) {
-            // 2. Si existe, SUMAR
+         
             int nuevaCant = existe.cantidad + item.cantidad;
             repo.updateCantidad(existe.id, nuevaCant);
             return "Cantidad actualizada a: " + nuevaCant;
         } else {
-            // 3. Si no, INSERTAR
+           
             repo.save(item);
             return "Producto agregado";
         }

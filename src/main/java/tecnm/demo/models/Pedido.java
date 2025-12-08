@@ -1,4 +1,4 @@
-package tecnm.demo.models; // <--- IMPORTANTE
+package tecnm.demo.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -19,8 +19,7 @@ public class Pedido {
     @Column(name = "importe_envio")
     public Double importeEnvio;
 
-    // Estos campos se calculan solos en la BD (Columnas generadas)
-    // Por eso ponemos insertable = false, updatable = false
+    
     @Column(name = "importe_iva", insertable = false, updatable = false)
     public Double importeIva;
 

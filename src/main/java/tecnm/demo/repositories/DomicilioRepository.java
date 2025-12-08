@@ -27,13 +27,12 @@ public class DomicilioRepository {
         jdbcTemplate.update(sql, d.calle, d.numero, d.colonia, d.cp, d.estado, d.ciudad, d.usuariosId);
     }
 
-    // --- NUEVO: Actualizar ---
+   
     public int update(Long id, Domicilio d) {
         String sql = "UPDATE domicilios SET calle=?, numero=?, colonia=?, cp=?, estado=?, ciudad=? WHERE id=?";
         return jdbcTemplate.update(sql, d.calle, d.numero, d.colonia, d.cp, d.estado, d.ciudad, id);
     }
 
-    // --- NUEVO: Eliminar ---
     public int delete(Long id) {
         return jdbcTemplate.update("DELETE FROM domicilios WHERE id=?", id);
     }
