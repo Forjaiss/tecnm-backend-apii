@@ -4,24 +4,25 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import tecnm.demo.models.Pedido; 
+import tecnm.demo.models.Pedido;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.UUID;
+import java.util.Map;
 
 @Repository
 public class PedidoRepository {
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate db;
 
-    public PedidoRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public PedidoRepository(JdbcTemplate db) {
+        this.db = db;
     }
 
     public Long crearPedido(Pedido p) {
         String sql = "INSERT INTO pedidos (numero, importe_productos, importe_envio, usuarios_id, metodos_pago_id, fecha) VALUES (?, ?, ?, ?, ?, NOW())";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(con -> {
+        db.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, UUID.randomUUID().toString());
             ps.setDouble(2, p.importeProductos);
@@ -31,11 +32,17 @@ public class PedidoRepository {
             return ps;
         }, keyHolder);
 
-        return (Long) keyHolder.getKeys().get("id");
+        // --- CORRECCIÓN DE SEGURIDAD (Integer vs Long) ---
+        Map<String, Object> keys = keyHolder.getKeys();
+        if (keys != null && keys.containsKey("id")) {
+            return ((Number) keys.get("id")).longValue();
+        } else {
+            return keyHolder.getKey().longValue();
+        }
     }
 
     public void guardarDetalle(Long pedidoId, Long prodId, Integer cant, Double precio) {
-        jdbcTemplate.update("INSERT INTO detalles_pedido (cantidad, precio, productos_id, pedidos_id) VALUES (?, ?, ?, ?)",
+        db.update("INSERT INTO detalles_pedido (cantidad, precio, productos_id, pedidos_id) VALUES (?, ?, ?, ?)",
             cant, precio, prodId, pedidoId);
     }
 }

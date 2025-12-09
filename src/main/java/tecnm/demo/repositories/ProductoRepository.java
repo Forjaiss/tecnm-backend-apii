@@ -16,12 +16,10 @@ public class ProductoRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     public List<Producto> findAll() {
         return jdbcTemplate.query("SELECT * FROM productos", new ProductoRowMapper());
     }
 
-   
     public Producto findById(Long id) {
         String sql = "SELECT * FROM productos WHERE id = ?";
         try {
@@ -29,7 +27,6 @@ public class ProductoRepository {
         } catch (Exception e) { return null; }
     }
 
-   
     public void save(Producto p) {
         String sql = """
             INSERT INTO productos (nombre, precio, sku, color, marca, descripcion, peso, alto, ancho, profundidad, categorias_id, img_url, stock)
@@ -39,7 +36,6 @@ public class ProductoRepository {
                             p.peso, p.alto, p.ancho, p.profundidad, p.categoriasId, p.imgUrl, p.stock);
     }
 
- 
     public int update(Long id, Producto p) {
         String sql = """
             UPDATE productos SET nombre=?, precio=?, sku=?, color=?, marca=?, descripcion=?, 
@@ -53,6 +49,13 @@ public class ProductoRepository {
     public int delete(Long id) {
         return jdbcTemplate.update("DELETE FROM productos WHERE id = ?", id);
     }
+
+    // 👇 ESTE ES EL MÉTODO QUE TE FALTABA 👇
+    public int updateStock(Long id, Integer nuevoStock) {
+        String sql = "UPDATE productos SET stock = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, nuevoStock, id);
+    }
+    // 👆👆👆
 
     private static class ProductoRowMapper implements RowMapper<Producto> {
         @Override
